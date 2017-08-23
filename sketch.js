@@ -29,8 +29,13 @@ function draw() {
 		segs.shift();
 	}
 
-	var last_x = segs.slice(-1)[0].x2;
-	var last_y = segs.slice(-1)[0].y2;
+	var last_seg = segs.slice(-1)[0];
+
+	var last_x = last_seg.x2;
+	var last_y = last_seg.y2;
+
+	var pen_x = last_seg.x1;
+	var pen_y = last_seg.y1;
 
 	var x_poss = [last_x];
 	var y_poss = [last_y];
@@ -51,7 +56,15 @@ function draw() {
 		y_poss.push(last_y - length);
 	}
 	
-	segs.push(new Segment(last_x, last_y, random(x_poss), random(y_poss)));
+	var new_x = random(x_poss);
+	var new_y = random(y_poss);
+
+	while ((new_x === last_x && new_y === last_y) || (new_x === pen_x && new_y === pen_y)) {
+		new_x = random(x_poss);
+		new_y = random(y_poss);
+	}
+	
+	segs.push(new Segment(last_x, last_y, new_x, new_y));
 
 }
 
