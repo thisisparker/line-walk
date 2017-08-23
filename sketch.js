@@ -16,6 +16,7 @@ function draw() {
 	translate(width/2, height/2);
 
 	strokeWeight(6);
+	strokeCap(SQUARE);
 
 	var strokecol = 255;
 	for (var i= segs.length-1; i > 0; i--) {
