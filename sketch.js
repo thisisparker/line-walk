@@ -34,19 +34,19 @@ function draw() {
 	var x_poss = [last_x];
 	var y_poss = [last_y];
 	
-	if (last_x < canvas.width/2) {
+	if (last_x < canvas.width/2 - 80) {
 		x_poss.push(last_x + length);
 	}
 
-	if (last_x > -canvas.width/2) {
+	if (last_x > -canvas.width/2 + 80) {
 		x_poss.push(last_x - length);
 	}
 
-	if (last_y < canvas.height/2) {
+	if (last_y < canvas.height/2 - 80) {
 		y_poss.push(last_y + length);
 	}
 
-	if (last_y > -canvas.height/2) {
+	if (last_y > -canvas.height/2 + 80) {
 		y_poss.push(last_y - length);
 	}
 	
