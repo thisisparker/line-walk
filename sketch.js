@@ -1,13 +1,18 @@
 var segs = []
 var length = 40;
+var chainlength = 48;
 
 function setup() {
 	createCanvas(window.innerWidth, window.innerHeight);
-	frameRate(25);
+	frameRate(8);
 
 	segs.push(new Segment(0, 0, 
 		random([-length, length, 0]), 
 		random([-length, length, 0])));
+
+	for (var i=0; i < chainlength/2; i++) {
+		segs.push(nextSegment(segs));
+	}
 }
 
 function draw() {
@@ -22,50 +27,14 @@ function draw() {
 	for (var i= segs.length-1; i > 0; i--) {
 		stroke(strokecol);
 		line(segs[i].x1, segs[i].y1, segs[i].x2, segs[i].y2);
-		strokecol -= 2;
+		strokecol -= Math.floor(255/chainlength);
 	}
 
-	if (segs.length > 100) {
+	if (segs.length > chainlength) {
 		segs.shift();
 	}
 
-	var last_seg = segs.slice(-1)[0];
-
-	var last_x = last_seg.x2;
-	var last_y = last_seg.y2;
-
-	var pen_x = last_seg.x1;
-	var pen_y = last_seg.y1;
-
-	var x_poss = [last_x];
-	var y_poss = [last_y];
-	
-	if (last_x < width/2 - 80) {
-		x_poss.push(last_x + length);
-	}
-
-	if (last_x > -width/2 + 80) {
-		x_poss.push(last_x - length);
-	}
-
-	if (last_y < height/2 - 80) {
-		y_poss.push(last_y + length);
-	}
-
-	if (last_y > -height/2 + 80) {
-		y_poss.push(last_y - length);
-	}
-	
-	var new_x = random(x_poss);
-	var new_y = random(y_poss);
-
-	while ((new_x === last_x && new_y === last_y) || (new_x === pen_x && new_y === pen_y)) {
-		new_x = random(x_poss);
-		new_y = random(y_poss);
-	}
-	
-	segs.push(new Segment(last_x, last_y, new_x, new_y));
-
+	segs.push(nextSegment(segs));
 }
 
 class Segment {
@@ -75,4 +44,45 @@ class Segment {
 		this.x2 = x2;
 		this.y2 = y2;
 	}
+}
+
+function nextSegment(segs) {
+	this.segs = segs;	
+	
+	this.last_seg = this.segs.slice(-1)[0];
+
+	this.last_x = this.last_seg.x2;
+	this.last_y = this.last_seg.y2;
+
+	this.pen_x = this.last_seg.x1;
+	this.pen_y = this.last_seg.y1;
+
+	this.x_poss = [this.last_x];
+	this.y_poss = [this.last_y];
+	
+	if (this.last_x < width/2 - 80) {
+		this.x_poss.push(this.last_x + length);
+	}
+
+	if (this.last_x > -width/2 + 80) {
+		this.x_poss.push(this.last_x - length);
+	}
+
+	if (this.last_y < height/2 - 80) {
+		this.y_poss.push(this.last_y + length);
+	}
+
+	if (this.last_y > -height/2 + 80) {
+		this.y_poss.push(this.last_y - length);
+	}
+	
+	this.new_x = random(this.x_poss);
+	this.new_y = random(this.y_poss);
+
+	while ((this.new_x === this.last_x && this.new_y === this.last_y) || (this.new_x === this.pen_x && this.new_y === this.pen_y)) {
+		this.new_x = random(this.x_poss);
+		this.new_y = random(this.y_poss);
+	}
+
+	return new Segment(this.last_x, this.last_y, this.new_x, this.new_y);
 }
